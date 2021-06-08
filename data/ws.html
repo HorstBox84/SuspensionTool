@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+  <style>
+  
+  table, th, td {
+    padding: 5px
+  }
+  
+  .card{
+  	display: inline-block;
+    max-width: 720px;
+    background: #C0C0C0;
+    padding: 10px;
+    box-sizing: border-box;
+    color: #000;
+    margin:10px;
+    box-shadow: 0px 5px 18px -4px rgba(0,0,0,0.75);
+    font-size: 16px;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    border-radius: 10px;
+  }
+  
+  .button {
+    display: inline-block;
+    padding: 10px 10px;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 16px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    outline: none;
+    color: #fff;
+    background-color: #ffc04a;
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 9px #999;
+    transition-duration: 0.5s;
+  }
+
+  .button:hover {
+  	background-color: #ffa600;
+    transition-duration: 0.5s;
+  }
+
+  .button:active {
+    background-color: #ffa600;
+    box-shadow: 0 5px #666;
+    transform: translateY(4px);
+    transition-duration: 0.1s;
+  }
+  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ESP Suspension Helper</title>
+   <head>
+      <script type = "text/javascript">
+        var ws = new WebSocket("ws://192.168.4.1/ws");
+ 
+        ws.onopen = function() {
+          // window.alert("Connected");
+        };
+ 
+        ws.onmessage = function(evt) {
+          var myObj = JSON.parse(evt.data);
+          // document.getElementById("debug").innerHTML  = "Debug: " + evt.data;
+          document.getElementById("display").innerHTML  = myObj.length.toFixed(1) + " mm";//Math.round(myObj.length*10)/10 + " mm";
+          // document.getElementById("max").innerHTML  = myObj.max.toFixed(1) + " mm";
+          document.getElementById("static").innerHTML  = myObj.static.toFixed(1) + " mm";
+          document.getElementById("dynamic").innerHTML  = myObj.dynamic.toFixed(1) + " mm";
+          document.getElementById("relative").innerHTML  = myObj.relative.toFixed(1) + " mm";
+        };
+
+      </script>
+   </head>
+ 
+   <body>
+      <div class="card">
+      	<table padding="15px">
+        	<tr>
+            	<th align = "right" width = "160px"><p>Absolute Length:</p></th>
+            	<th align = "left" width = "150px"><p id = "display">xxx,xx mm</p></th>
+            </tr>
+        	<tr>
+            	<td align = "right"><p>Relative Sag:</p></td>
+                <td width = "150px"><p id = "relative">xxx,xx mm</p></td>
+        		<td align = "center"><button onclick="ws.send('m')" type="button" id="setzero" class="button">Set Zero Travel</button></td>
+            </tr>
+        	<tr>
+            	<td align = "right"><p>Static Sag:</p></td>
+            	<td width = "150px"><p id = "static">xxx,xx mm</p></td>
+        		<td align = "center"><button onclick="ws.send('s')" type="button" id="setstatic" class="button">Set Static Sag</button></td>
+        	</tr>
+        	<tr>
+            	<td align = "right"><p>Dynamic Sag:</p></td>
+        		<td width = "150px"><p id = "dynamic">xxx,xx mm</p></td>
+        		<td align = "center"><button onclick="ws.send('d')" type="button" id="setdynamic" class="button">Set Dynamic Sag</button></td>
+	        </tr>
+        </table>
+      </div>
+   </body>
+</html>
